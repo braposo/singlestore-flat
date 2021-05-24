@@ -8,6 +8,8 @@ on:
       - .github/workflows/flat.yml
       - ./query.sql
       - ./returns.sql
+      - ./profits.sql
+      - ./pricing.sql
 jobs:
   scheduled:
     runs-on: ubuntu-latest
@@ -30,3 +32,15 @@ jobs:
           sql_connstring: ${{ secrets.FLAT_L4FHVR_CONNSTRING }}
           sql_queryfile: ./returns.sql
           downloaded_filename: returns.json
+      - name: Fetch data
+        uses: githubocto/flat@v2
+        with:
+          sql_connstring: ${{ secrets.FLAT_L4FHVR_CONNSTRING }}
+          sql_queryfile: ./profits.sql
+          downloaded_filename: profits.json
+      - name: Fetch data
+        uses: githubocto/flat@v2
+        with:
+          sql_connstring: ${{ secrets.FLAT_L4FHVR_CONNSTRING }}
+          sql_queryfile: ./pricing.sql
+          downloaded_filename: pricing.json
