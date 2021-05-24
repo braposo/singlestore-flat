@@ -1,32 +1,21 @@
 select
-    nation,
-    o_year,
-    sum(amount) as sum_profit
+    l_returnflag,
+    l_linestatus,
+    sum(l_quantity) as sum_qty,
+    sum(l_extendedprice) as sum_base_price,
+    sum(l_extendedprice * (1 - l_discount)) as sum_disc_price,
+    sum(l_extendedprice * (1 - l_discount) * (1 + l_tax)) as sum_charge,
+    avg(l_quantity) as avg_qty,
+    avg(l_extendedprice) as avg_price,
+    avg(l_discount) as avg_disc,
+    count(*) as count_order
 from
-    (
-        select
-            n_name as nation,
-            extract(year from o_orderdate) as o_year,
-            l_extendedprice * (1 - l_discount) - ps_supplycost * l_quantity as amount
-        from
-            part,
-            supplier,
-            lineitem,
-            partsupp,
-            orders,
-            nation
-        where
-            s_suppkey = l_suppkey
-            and ps_suppkey = l_suppkey
-            and ps_partkey = l_partkey
-            and p_partkey = l_partkey
-            and o_orderkey = l_orderkey
-            and s_nationkey = n_nationkey
-            and p_name like '%green%'
-    ) as profit
+    lineitem
+where
+    l_shipdate <= date('1998-12-01' - interval '90' day)
 group by
-    nation,
-    o_year
+    l_returnflag,
+    l_linestatus
 order by
-    nation,
-    o_year desc;
+    l_returnflag,
+    l_linestatus;
