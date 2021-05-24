@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - .github/workflows/flat.yml
+      - ./query.sql
 jobs:
   scheduled:
     runs-on: ubuntu-latest
@@ -19,6 +20,6 @@ jobs:
       - name: Fetch data
         uses: githubocto/flat@v2
         with:
-          sql_connstring: ""
-          sql_queryfile: ""
-          downloaded_filename: data.j
+          sql_connstring: ${{ secrets.FLAT_DQB4S6_CONNSTRING }}
+          sql_queryfile: ./query.sql
+          downloaded_filename: data.json
