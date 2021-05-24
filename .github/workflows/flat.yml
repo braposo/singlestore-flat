@@ -1,12 +1,13 @@
 name: data
 on:
   schedule:
-    - cron: 0 0 * * *
+    - cron: 0 * * * *
   workflow_dispatch: {}
   push:
     paths:
       - .github/workflows/flat.yml
       - ./query.sql
+      - ./returns.sql
 jobs:
   scheduled:
     runs-on: ubuntu-latest
@@ -23,3 +24,9 @@ jobs:
           sql_connstring: ${{ secrets.FLAT_DQB4S6_CONNSTRING }}
           sql_queryfile: ./query.sql
           downloaded_filename: data.json
+      - name: Fetch data
+        uses: githubocto/flat@v2
+        with:
+          sql_connstring: ${{ secrets.FLAT_L4FHVR_CONNSTRING }}
+          sql_queryfile: ./returns.sql
+          downloaded_filename: returns.json
